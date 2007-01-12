@@ -1,0 +1,46 @@
+/**
+ * CSS Style for DokuWiki GTD Plugin
+ *
+ * @author Michael Klier <chi@chimeric.de> 
+ */
+
+div.dokuwiki div.plugin_gtd_box {
+  border: 1px solid __border__;
+  margin-bottom: 1em;
+}
+
+div.dokuwiki h2.plugin_gtd_context {
+  border: none;
+  margin: 0;
+  margin-bottom: 0.3em;
+  padding: 0.3em;
+  border-bottom: 1px solid __border__;
+  background-color: __background_alt__;
+}
+
+div.dokuwiki span.plugin_gtd_project {
+  font-weight: bold;
+}
+
+div.dokuwiki li.plugin_gtd_item del {
+  color: __text_neu__;
+}
+
+div.dokuwiki span.plugin_gtd_over {
+  background-color: #ff5757;
+  color: #fff;
+}
+
+div.dokuwiki span.plugin_gtd_upcoming {
+  background-color: #71d45b;
+  color: #fff;
+}
+
+div.dokuwiki span.plugin_gtd_current {
+  background-color: #ffa043;
+  color: #fff;
+}
+
+/**
+ * vim:ts=2:sw=2:et:enc=utf-8:
+ */
