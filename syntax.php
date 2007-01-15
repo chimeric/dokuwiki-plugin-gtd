@@ -1,9 +1,9 @@
 <?php
 /**
- * DokuWiki Plugin GTD (Getting Things Done)
+ * DokuWiki Syntax Plugin GTD (Getting Things Done)
  * 
- * @license     GPL 2 (http://www.gnu.org/licenses/gpl.html)
- * @author      Michael Klier <chi@chimeric.de>
+ * @license GPL 2 (http://www.gnu.org/licenses/gpl.html)
+ * @author  Michael Klier <chi@chimeric.de>
  */
 if(!defined('DOKU_INC')) define('DOKU_INC',realpath(dirname(__FILE__).'/../../').'/');
 if(!defined('DOKU_PLUGIN')) define('DOKU_PLUGIN',DOKU_INC.'lib/plugins/');
@@ -25,7 +25,7 @@ class syntax_plugin_gtd extends DokuWiki_Syntax_Plugin {
             'author' => 'Michael Klier',
             'email'  => 'chi@chimeric.de',
             'date'   => '2007-01-12',
-            'name'   => 'Plugin GTD (Getting Things Done)',
+            'name'   => 'GTD (Getting Things Done)',
             'desc'   => 'Implements a ToDo List following the principles of GTD.',
             'url'    => 'http://www.chimeric.de/projects/dokuwiki/plugin/gtd',
         );
