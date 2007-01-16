@@ -24,7 +24,7 @@ class syntax_plugin_gtd extends DokuWiki_Syntax_Plugin {
         return array(
             'author' => 'Michael Klier',
             'email'  => 'chi@chimeric.de',
-            'date'   => '2007-01-12',
+            'date'   => '2007-01-16',
             'name'   => 'GTD (Getting Things Done)',
             'desc'   => 'Implements a ToDo List following the principles of GTD.',
             'url'    => 'http://www.chimeric.de/projects/dokuwiki/plugin/gtd',
@@ -109,12 +109,6 @@ class syntax_plugin_gtd extends DokuWiki_Syntax_Plugin {
                 continue;
             }
 
-            // filter project
-            if(preg_match("#p:([^:/ ]+)#", $line, $match)) {
-                $todo['project'] = $match[1];
-                $line = trim(str_replace($match[0], '', $line));
-            }
-            
             // filter date
             if(preg_match("#\d{4}-\d{2}-\d{2}#", $line, $match)) {
                 $todo['date'] = $match[0];
@@ -145,6 +139,13 @@ class syntax_plugin_gtd extends DokuWiki_Syntax_Plugin {
     function _todolist_xhtml($todolist) {
         $out  = '';
 
+        // create new renderer for the description part
+        $renderer = & new Doku_Renderer_xhtml();
+        $renderer->smileys  = getSmileys();
+        $renderer->entities = getEntities();
+        $renderer->acronyms = getAcronyms();
+        $renderer->interwiki = getInterwiki();
+
         foreach($todolist as $context => $items) {
             $out .= '<div class="plugin_gtd_box">' . DW_LF;
             $out .= '<h2 class="plugin_gtd_context">' . htmlspecialchars($context) . '</h2>' . DW_LF;
@@ -161,7 +162,27 @@ class syntax_plugin_gtd extends DokuWiki_Syntax_Plugin {
                     $out .= '">' . $item['date'] . '</span>' . DW_LF;
                 }
 
-                $out .= '<span class="plugin_gtd_desc">' . htmlspecialchars($item['desc']) . '</span>' . DW_LF;
+                $out .= '<span class="plugin_gtd_desc">'; 
+
+                // turn description into instructions
+                $instructions = p_get_instructions($item['desc']);
+
+                // reset doc
+                $renderer->doc = '';
+
+                // loop thru instructions
+                foreach($instructions as $instruction) {
+                    call_user_func_array(array(&$renderer, $instruction[0]),$instruction[1]);
+                }
+
+                // strip <p> and </p>
+                $desc = $renderer->doc;
+                $desc = str_replace("<p>", '', $desc);
+                $desc = str_replace("</p>", '', $desc);
+                $out .= $desc;
+
+                $out .= '</span>' . DW_LF;
+
 
                 if(isset($item['project'])) {
                     $out .= '<span class="plugin_gtd_project">(' . htmlspecialchars($item['project']) . ')</span>';
