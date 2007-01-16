@@ -102,7 +102,7 @@ class syntax_plugin_gtd extends DokuWiki_Syntax_Plugin {
 
             // filter context
             if(preg_match("#@([^ ]+)#", $line, $match)) {
-                $context = $match[1];
+                $context = trim(str_replace('_', ' ',$match[1]));
                 $line = trim(str_replace($match[0], '', $line));
             } else {
                 // skip further processing if no context was given
