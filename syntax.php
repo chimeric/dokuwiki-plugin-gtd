@@ -110,7 +110,7 @@ class syntax_plugin_gtd extends DokuWiki_Syntax_Plugin {
             }
 
             // filter project
-            if(preg_match("#p:([^ ]+)#", $line, $match)) {
+            if(preg_match("#p:([^:/ ]+)#", $line, $match)) {
                 $todo['project'] = $match[1];
                 $line = trim(str_replace($match[0], '', $line));
             }
