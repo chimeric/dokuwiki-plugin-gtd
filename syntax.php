@@ -24,7 +24,7 @@ class syntax_plugin_gtd extends DokuWiki_Syntax_Plugin {
         return array(
             'author' => 'Michael Klier',
             'email'  => 'chi@chimeric.de',
-            'date'   => '2007-01-16',
+            'date'   => '2007-01-19',
             'name'   => 'GTD (Getting Things Done)',
             'desc'   => 'Implements a ToDo List following the principles of GTD.',
             'url'    => 'http://www.chimeric.de/projects/dokuwiki/plugin/gtd',
@@ -105,8 +105,8 @@ class syntax_plugin_gtd extends DokuWiki_Syntax_Plugin {
                 $context = trim(str_replace('_', ' ',$match[1]));
                 $line = trim(str_replace($match[0], '', $line));
             } else {
-                // skip further processing if no context was given
-                continue;
+                // no context was given - use default
+                $context = $this->getConf('default_context');
             }
 
             // filter date
