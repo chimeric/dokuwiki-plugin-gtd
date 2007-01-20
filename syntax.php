@@ -24,7 +24,7 @@ class syntax_plugin_gtd extends DokuWiki_Syntax_Plugin {
         return array(
             'author' => 'Michael Klier',
             'email'  => 'chi@chimeric.de',
-            'date'   => '2007-01-19',
+            'date'   => '2007-01-20',
             'name'   => 'GTD (Getting Things Done)',
             'desc'   => 'Implements a ToDo List following the principles of GTD.',
             'url'    => 'http://www.chimeric.de/projects/dokuwiki/plugin/gtd',
@@ -102,11 +102,17 @@ class syntax_plugin_gtd extends DokuWiki_Syntax_Plugin {
 
             // filter context
             if(preg_match("#@([^ ]+)#", $line, $match)) {
-                $context = trim(str_replace('_', ' ',$match[1]));
+                $context = str_replace('_', ' ',$match[1]);
                 $line = trim(str_replace($match[0], '', $line));
             } else {
                 // no context was given - use default
                 $context = $this->getConf('default_context');
+            }
+
+            // filter project
+            if(preg_match("#\bp:([^ ]+)\b#", $line, $match)) {
+                $project = str_replace('_', ' ', $match[1]);
+                $line = trim(str_replace($match[0], '', $line));
             }
 
             // filter date
@@ -125,7 +131,11 @@ class syntax_plugin_gtd extends DokuWiki_Syntax_Plugin {
             $todo['desc'] = trim($line);
             if(empty($todo['desc'])) continue;
 
-            $todolist[$context][] = $todo;
+            if($project) {
+                $todolist[$context]['projects'][$project][] = $todo;
+            } else {
+                $todolist[$context]['todos'][] = $todo;
+            }
         }
 
         return ($todolist);
@@ -146,56 +156,77 @@ class syntax_plugin_gtd extends DokuWiki_Syntax_Plugin {
         $renderer->acronyms = getAcronyms();
         $renderer->interwiki = getInterwiki();
 
-        foreach($todolist as $context => $items) {
+        foreach($todolist as $context => $todos) {
             $out .= '<div class="plugin_gtd_box">' . DW_LF;
             $out .= '<h2 class="plugin_gtd_context">' . htmlspecialchars($context) . '</h2>' . DW_LF;
             $out .= '<ul>' . DW_LF;
 
-            foreach($items as $item) {
-                $out .= '<li class="plugin_gtd_item"><span class="li">' . DW_LF;
-
-                if($item['done']) $out .= '<del>';
-
-                if(isset($item['date'])) {
-                    $out .= '<span class="plugin_gtd_date ';
-                    if(!$item['done']) $out .= 'plugin_gtd_' . $item['priority'];
-                    $out .= '">' . $item['date'] . '</span>' . DW_LF;
+            if(array_key_exists('projects', $todos)) {
+                foreach($todos['projects'] as $project => $todos) {
+                    $out .= '<li><span class="li plugin_gtd_project">' . $project . '</span></li>' . DW_LF;
+                    $out .= '<ul>' . DW_LF;
+                    foreach($todos as $todo) {
+                        $out .= $this->_todo_xhtml(&$renderer, $todo);
+                    }
+                    $out .= '</ul>' . DW_LF;
                 }
+            }
 
-                $out .= '<span class="plugin_gtd_desc">'; 
-
-                // turn description into instructions
-                $instructions = p_get_instructions($item['desc']);
-
-                // reset doc
-                $renderer->doc = '';
-
-                // loop thru instructions
-                foreach($instructions as $instruction) {
-                    call_user_func_array(array(&$renderer, $instruction[0]),$instruction[1]);
+            if(array_key_exists('todos', $todos)) {
+                foreach($todos['todos'] as $todo) {
+                    $out .= $this->_todo_xhtml(&$renderer, $todo);
                 }
-
-                // strip <p> and </p>
-                $desc = $renderer->doc;
-                $desc = str_replace("<p>", '', $desc);
-                $desc = str_replace("</p>", '', $desc);
-                $out .= $desc;
-
-                $out .= '</span>' . DW_LF;
-
-
-                if(isset($item['project'])) {
-                    $out .= '<span class="plugin_gtd_project">(' . htmlspecialchars($item['project']) . ')</span>';
-                }
-
-                if($item['done']) $out .= '</del>';
-
-                $out .= '</span></li>' . DW_LF;
             }
 
             $out .= '</ul>' . DW_LF;
             $out .= '</div>' . DW_LF;
         }
+
+        return ($out);
+    }
+
+    /**
+     * returns the xhtml for single todo item
+     *
+     * @author Michael Klier <chi@chimeric.de>
+     */
+    function _todo_xhtml(&$renderer, $todo) {
+        $out  = '';
+
+        // reset doc
+        $renderer->doc = '';
+
+        $out .= '<li class="plugin_gtd_item"><span class="li">' . DW_LF;
+
+        if($todo['done']) $out .= '<del>';
+
+        if(isset($todo['date'])) {
+            $out .= '<span class="plugin_gtd_date ';
+            if(!$todo['done']) $out .= 'plugin_gtd_' . $todo['priority'];
+            $out .= '">' . $todo['date'] . '</span>' . DW_LF;
+        }
+
+        $out .= '<span class="plugin_gtd_desc">'; 
+
+        // turn description into instructions
+        $instructions = p_get_instructions($todo['desc']);
+
+        // loop thru instructions
+        foreach($instructions as $instruction) {
+            call_user_func_array(array(&$renderer, $instruction[0]),$instruction[1]);
+        }
+
+        // strip <p> and </p>
+        $desc = $renderer->doc;
+        $desc = str_replace("<p>", '', $desc);
+        $desc = str_replace("</p>", '', $desc);
+        $out .= $desc;
+
+        $out .= '</span>' . DW_LF;
+
+        if($todo['done']) $out .= '</del>';
+
+        $out .= '</span></li>' . DW_LF;
 
         return ($out);
     }
