@@ -24,7 +24,7 @@ class syntax_plugin_gtd extends DokuWiki_Syntax_Plugin {
         return array(
             'author' => 'Michael Klier',
             'email'  => 'chi@chimeric.de',
-            'date'   => '2007-01-20',
+            'date'   => '2007-01-22',
             'name'   => 'GTD (Getting Things Done)',
             'desc'   => 'Implements a ToDo List following the principles of GTD.',
             'url'    => 'http://www.chimeric.de/projects/dokuwiki/plugin/gtd',
@@ -161,9 +161,9 @@ class syntax_plugin_gtd extends DokuWiki_Syntax_Plugin {
             $out .= '<h2 class="plugin_gtd_context">' . htmlspecialchars($context) . '</h2>' . DW_LF;
             $out .= '<ul>' . DW_LF;
 
-            if(array_key_exists('projects', $todos)) {
-                foreach($todos['projects'] as $project => $todos) {
-                    $out .= '<li><span class="li plugin_gtd_project">' . $project . '</span></li>' . DW_LF;
+            if(!empty($todolist[$context]['projects'])) {
+                foreach($todolist[$context]['projects'] as $project => $todos) {
+                    $out .= '<li><span class="li plugin_gtd_project">' . htmlspecialchars($project) . '</span></li>' . DW_LF;
                     $out .= '<ul>' . DW_LF;
                     foreach($todos as $todo) {
                         $out .= $this->_todo_xhtml(&$renderer, $todo);
@@ -172,8 +172,8 @@ class syntax_plugin_gtd extends DokuWiki_Syntax_Plugin {
                 }
             }
 
-            if(array_key_exists('todos', $todos)) {
-                foreach($todos['todos'] as $todo) {
+            if(!empty($todolist[$context]['todos'])) {
+                foreach($todolist[$context]['todos'] as $todo) {
                     $out .= $this->_todo_xhtml(&$renderer, $todo);
                 }
             }
