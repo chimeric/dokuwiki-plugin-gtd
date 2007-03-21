@@ -11,8 +11,7 @@ div.dokuwiki div.plugin_gtd_box {
 
 div.dokuwiki h2.plugin_gtd_context {
   border: none;
-  margin: 0;
-  margin-bottom: 0.3em;
+  margin: 0 0 0.5em 0;
   padding: 0.3em;
   border-bottom: 1px solid __border__;
   background-color: __background_alt__;
@@ -22,23 +21,51 @@ div.dokuwiki span.plugin_gtd_project {
   font-weight: bold;
 }
 
+div.dokuwiki div.plugin_gtd_box ul.plugin_gtd_list {
+  list-style: none;
+  margin: 0 0.8em 0.8em 0.8em;
+}
+
+div.dokuwiki div.plugin_gtd_box ul.plugin_gtd_project {
+  list-style: none;
+  margin: 0 0 0.8em 0.5em;
+}
+
+div.dokuwiki div.plugin_gtd_box li {
+  padding: 0.3em;
+  border: 1px solid __border__;
+  border-top: none;
+}
+
+div.dokuwiki div.plugin_gtd_box li.plugin_gtd_project {
+  border-top: 1px solid __border__;
+  background: __background_neu__;
+}
+
 div.dokuwiki li.plugin_gtd_item del {
   color: __text_neu__;
 }
 
+div.dokuwiki span.plugin_gtd_over,
+div.dokuwiki span.plugin_gtd_upcoming,
+div.dokuwiki span.plugin_gtd_current {
+  padding: 0 0 2px 20px;
+  font-weight: bold;
+}
+
 div.dokuwiki span.plugin_gtd_over {
-  background-color: #ff5757;
-  color: #fff;
+  background: url(images/status-over.png) no-repeat 0px 1px;
+  color: #ff5757;
 }
 
 div.dokuwiki span.plugin_gtd_upcoming {
-  background-color: #71d45b;
-  color: #fff;
+  background: url(images/status-upcoming.png) no-repeat 0px 1px;
+  color: #71d45b;
 }
 
 div.dokuwiki span.plugin_gtd_current {
-  background-color: #ffa043;
-  color: #fff;
+  background: url(images/status-current.png) no-repeat 0px 1px;
+  color: #ffa043;
 }
 
 /**

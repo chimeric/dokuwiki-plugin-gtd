@@ -24,7 +24,7 @@ class syntax_plugin_gtd extends DokuWiki_Syntax_Plugin {
         return array(
             'author' => 'Michael Klier',
             'email'  => 'chi@chimeric.de',
-            'date'   => '2007-01-22',
+            'date'   => '2007-03-14',
             'name'   => 'GTD (Getting Things Done)',
             'desc'   => 'Implements a ToDo List following the principles of GTD.',
             'url'    => 'http://www.chimeric.de/projects/dokuwiki/plugin/gtd',
@@ -159,12 +159,12 @@ class syntax_plugin_gtd extends DokuWiki_Syntax_Plugin {
         foreach($todolist as $context => $todos) {
             $out .= '<div class="plugin_gtd_box">' . DW_LF;
             $out .= '<h2 class="plugin_gtd_context">' . htmlspecialchars($context) . '</h2>' . DW_LF;
-            $out .= '<ul>' . DW_LF;
+            $out .= '<ul class="plugin_gtd_list">' . DW_LF;
 
             if(!empty($todolist[$context]['projects'])) {
                 foreach($todolist[$context]['projects'] as $project => $todos) {
-                    $out .= '<li><span class="li plugin_gtd_project">' . htmlspecialchars($project) . '</span></li>' . DW_LF;
-                    $out .= '<ul>' . DW_LF;
+                    $out .= '<li class="plugin_gtd_project"><span class="li plugin_gtd_project">' . htmlspecialchars($project) . '</span></li>' . DW_LF;
+                    $out .= '<ul class="plugin_gtd_project">' . DW_LF;
                     foreach($todos as $todo) {
                         $out .= $this->_todo_xhtml(&$renderer, $todo);
                     }
@@ -173,9 +173,12 @@ class syntax_plugin_gtd extends DokuWiki_Syntax_Plugin {
             }
 
             if(!empty($todolist[$context]['todos'])) {
+                $out .= '<li class="plugin_gtd_project"><span class="li plugin_gtd_project">' . $this->getLang('noproject') . '</span></li>' . DW_LF;
+                $out .= '<ul class="plugin_gtd_project">' . DW_LF;
                 foreach($todolist[$context]['todos'] as $todo) {
                     $out .= $this->_todo_xhtml(&$renderer, $todo);
                 }
+                $out .= '</ul>' . DW_LF;
             }
 
             $out .= '</ul>' . DW_LF;
@@ -201,12 +204,12 @@ class syntax_plugin_gtd extends DokuWiki_Syntax_Plugin {
         if($todo['done']) $out .= '<del>';
 
         if(isset($todo['date'])) {
-            $out .= '<span class="plugin_gtd_date ';
+            $out .= '<div class="plugin_gtd_date"><span class="';
             if(!$todo['done']) $out .= 'plugin_gtd_' . $todo['priority'];
-            $out .= '">' . $todo['date'] . '</span>' . DW_LF;
+            $out .= '">' . $todo['date'] . '</span></div>' . DW_LF;
         }
 
-        $out .= '<span class="plugin_gtd_desc">'; 
+        $out .= '<div class="plugin_gtd_desc">'; 
 
         // turn description into instructions
         $instructions = p_get_instructions($todo['desc']);
@@ -222,7 +225,7 @@ class syntax_plugin_gtd extends DokuWiki_Syntax_Plugin {
         $desc = str_replace("</p>", '', $desc);
         $out .= $desc;
 
-        $out .= '</span>' . DW_LF;
+        $out .= '</div>' . DW_LF;
 
         if($todo['done']) $out .= '</del>';
 
