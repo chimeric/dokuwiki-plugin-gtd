@@ -24,7 +24,7 @@ class syntax_plugin_gtd extends DokuWiki_Syntax_Plugin {
         return array(
             'author' => 'Michael Klier',
             'email'  => 'chi@chimeric.de',
-            'date'   => '2007-03-14',
+            'date'   => '2007-04-10',
             'name'   => 'GTD (Getting Things Done)',
             'desc'   => 'Implements a ToDo List following the principles of GTD.',
             'url'    => 'http://www.chimeric.de/projects/dokuwiki/plugin/gtd',
@@ -201,7 +201,6 @@ class syntax_plugin_gtd extends DokuWiki_Syntax_Plugin {
 
         $out .= '<li class="plugin_gtd_item"><span class="li">' . DW_LF;
 
-        if($todo['done']) $out .= '<del>';
 
         if(isset($todo['date'])) {
             $out .= '<div class="plugin_gtd_date"><span class="';
@@ -210,6 +209,8 @@ class syntax_plugin_gtd extends DokuWiki_Syntax_Plugin {
         }
 
         $out .= '<div class="plugin_gtd_desc">'; 
+
+        if($todo['done']) $out .= '<del>';
 
         // turn description into instructions
         $instructions = p_get_instructions($todo['desc']);
@@ -225,9 +226,10 @@ class syntax_plugin_gtd extends DokuWiki_Syntax_Plugin {
         $desc = str_replace("</p>", '', $desc);
         $out .= $desc;
 
+        if($todo['done']) $out .= '</del>';
+
         $out .= '</div>' . DW_LF;
 
-        if($todo['done']) $out .= '</del>';
 
         $out .= '</span></li>' . DW_LF;
 
