@@ -163,22 +163,24 @@ class syntax_plugin_gtd extends DokuWiki_Syntax_Plugin {
 
             if(!empty($todolist[$context]['projects'])) {
                 foreach($todolist[$context]['projects'] as $project => $todos) {
-                    $out .= '<li class="plugin_gtd_project"><span class="li plugin_gtd_project">' . htmlspecialchars($project) . '</span></li>' . DW_LF;
+                    $out .= '<li class="plugin_gtd_project"><span class="li plugin_gtd_project">' . htmlspecialchars($project) . '</span>' . DW_LF;
                     $out .= '<ul class="plugin_gtd_project">' . DW_LF;
                     foreach($todos as $todo) {
                         $out .= $this->_todo_xhtml(&$renderer, $todo);
                     }
                     $out .= '</ul>' . DW_LF;
+                    $out .= '</li>' . DW_LF;
                 }
             }
 
             if(!empty($todolist[$context]['todos'])) {
-                $out .= '<li class="plugin_gtd_project"><span class="li plugin_gtd_project">' . $this->getLang('noproject') . '</span></li>' . DW_LF;
+                $out .= '<li class="plugin_gtd_project"><span class="li plugin_gtd_project">' . $this->getLang('noproject') . '</span>' . DW_LF;
                 $out .= '<ul class="plugin_gtd_project">' . DW_LF;
                 foreach($todolist[$context]['todos'] as $todo) {
                     $out .= $this->_todo_xhtml(&$renderer, $todo);
                 }
                 $out .= '</ul>' . DW_LF;
+                $out .= '</li>' . DW_LF;
             }
 
             $out .= '</ul>' . DW_LF;
@@ -199,7 +201,7 @@ class syntax_plugin_gtd extends DokuWiki_Syntax_Plugin {
         // reset doc
         $renderer->doc = '';
 
-        $out .= '<li class="plugin_gtd_item"><span class="li">' . DW_LF;
+        $out .= '<li class="plugin_gtd_item"><div class="li">' . DW_LF;
 
 
         if(isset($todo['date'])) {
@@ -231,7 +233,7 @@ class syntax_plugin_gtd extends DokuWiki_Syntax_Plugin {
         $out .= '</div>' . DW_LF;
 
 
-        $out .= '</span></li>' . DW_LF;
+        $out .= '</div></li>' . DW_LF;
 
         return ($out);
     }

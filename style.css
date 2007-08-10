@@ -19,6 +19,10 @@ div.dokuwiki h2.plugin_gtd_context {
 
 div.dokuwiki span.plugin_gtd_project {
   font-weight: bold;
+  border: 1px solid __border__;
+  background: __background_neu__;
+  display: block;
+  padding: 0.5em;
 }
 
 div.dokuwiki div.plugin_gtd_box ul.plugin_gtd_list {
@@ -31,15 +35,14 @@ div.dokuwiki div.plugin_gtd_box ul.plugin_gtd_project {
   margin: 0 0 0.8em 0.5em;
 }
 
-div.dokuwiki div.plugin_gtd_box li {
+div.dokuwiki div.plugin_gtd_box ul.plugin_gtd_project li {
   padding: 0.3em;
   border: 1px solid __border__;
   border-top: none;
 }
 
 div.dokuwiki div.plugin_gtd_box li.plugin_gtd_project {
-  border-top: 1px solid __border__;
-  background: __background_neu__;
+  margin-bottom: 0.5em;
 }
 
 div.dokuwiki li.plugin_gtd_item del {
