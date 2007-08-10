@@ -24,7 +24,7 @@ class syntax_plugin_gtd extends DokuWiki_Syntax_Plugin {
         return array(
             'author' => 'Michael Klier',
             'email'  => 'chi@chimeric.de',
-            'date'   => '2007-04-10',
+            'date'   => '2007-08-10',
             'name'   => 'GTD (Getting Things Done)',
             'desc'   => 'Implements a ToDo List following the principles of GTD.',
             'url'    => 'http://www.chimeric.de/projects/dokuwiki/plugin/gtd',
@@ -101,7 +101,7 @@ class syntax_plugin_gtd extends DokuWiki_Syntax_Plugin {
             }
 
             // filter context
-            if(preg_match("#@([^ ]+)#", $line, $match)) {
+            if(preg_match("#@(\S+)#", $line, $match)) {
                 $context = str_replace('_', ' ',$match[1]);
                 $line = trim(str_replace($match[0], '', $line));
             } else {
@@ -110,7 +110,7 @@ class syntax_plugin_gtd extends DokuWiki_Syntax_Plugin {
             }
 
             // filter project
-            if(preg_match("#\bp:([^ ]+)\b#", $line, $match)) {
+            if(preg_match("#\bp:(\S+)#", $line, $match)) {
                 $project = str_replace('_', ' ', $match[1]);
                 $line = trim(str_replace($match[0], '', $line));
             }
