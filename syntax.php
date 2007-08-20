@@ -166,7 +166,7 @@ class syntax_plugin_gtd extends DokuWiki_Syntax_Plugin {
                     $out .= '<li class="plugin_gtd_project"><span class="li plugin_gtd_project">' . htmlspecialchars($project) . '</span>' . DW_LF;
                     $out .= '<ul class="plugin_gtd_project">' . DW_LF;
                     foreach($todos as $todo) {
-                        $out .= $this->_todo_xhtml(&$renderer, $todo);
+                        $out .= @$this->_todo_xhtml(&$renderer, $todo);
                     }
                     $out .= '</ul>' . DW_LF;
                     $out .= '</li>' . DW_LF;
@@ -177,7 +177,7 @@ class syntax_plugin_gtd extends DokuWiki_Syntax_Plugin {
                 $out .= '<li class="plugin_gtd_project"><span class="li plugin_gtd_project">' . $this->getLang('noproject') . '</span>' . DW_LF;
                 $out .= '<ul class="plugin_gtd_project">' . DW_LF;
                 foreach($todolist[$context]['todos'] as $todo) {
-                    $out .= $this->_todo_xhtml(&$renderer, $todo);
+                    $out .= @$this->_todo_xhtml(&$renderer, $todo);
                 }
                 $out .= '</ul>' . DW_LF;
                 $out .= '</li>' . DW_LF;
