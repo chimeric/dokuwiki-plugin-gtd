@@ -118,7 +118,7 @@ class syntax_plugin_gtd extends DokuWiki_Syntax_Plugin {
             }
 
             // filter date
-            if(preg_match("#\d{4}-\d{2}-\d{2}#", $line, $match)) {
+            if(preg_match("#\b\d{4}-\d{2}-\d{2}\b#", $line, $match)) {
                 $todo['date'] = $match[0];
                 $todo['priority'] = $this->_get_priority($todo['date']);
                 $line = trim(str_replace($match[0], '', $line));
