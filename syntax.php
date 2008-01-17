@@ -211,7 +211,7 @@ class syntax_plugin_gtd extends DokuWiki_Syntax_Plugin {
 
         // serialize todolist so we don't have to render it each time
         if($ACT == 'save') {
-            if(!file_exists($conf['savedir'] . '/cache/gtd')) {
+            if(!file_exists($conf['savedir'] . 'cache/gtd/')) {
                 mkdir($conf['savedir'] . 'cache/gtd/', $conf['dmode']);
             }
             io_saveFile($this->_todoFN(md5($data)), serialize($todolist));
