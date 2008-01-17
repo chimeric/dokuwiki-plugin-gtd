@@ -79,7 +79,7 @@ class syntax_plugin_gtd extends DokuWiki_Syntax_Plugin {
 
         $todolist = array();
 
-        $lines = explode("\n",trim($data));
+        $lines = explode("\n\n",trim($data));
 
         foreach($lines as $line) {
 
@@ -92,7 +92,8 @@ class syntax_plugin_gtd extends DokuWiki_Syntax_Plugin {
             $due     = '';
             $desc    = '';
 
-            $line = trim($line);
+            list($params, $desc) = explode("\n", trim($line));
+            $todo['desc'] = trim($desc);
 
             // check if done
             if($line{0} == '#') {
@@ -103,34 +104,33 @@ class syntax_plugin_gtd extends DokuWiki_Syntax_Plugin {
             }
 
             // filter context
-            if(preg_match("#@(\S+)#", $line, $match)) {
+            if(preg_match("#@(\S+)#", $params, $match)) {
                 $context = str_replace('_', ' ',$match[1]);
-                $line = trim(str_replace($match[0], '', $line));
+                $params = trim(str_replace($match[0], '', $params));
             } else {
                 // no context was given - use default
                 $context = $this->getConf('default_context');
             }
 
             // filter project
-            if(preg_match("#\bp:(\S+)#", $line, $match)) {
+            if(preg_match("#\bp:(\S+)#", $params, $match)) {
                 $project = str_replace('_', ' ', $match[1]);
-                $line = trim(str_replace($match[0], '', $line));
+                $params = trim(str_replace($match[0], '', $params));
             }
 
             // filter date
-            if(preg_match("#\b\d{4}-\d{2}-\d{2}\b#", $line, $match)) {
+            if(preg_match("#\b\d{4}-\d{2}-\d{2}\b#", $params, $match)) {
                 $todo['date'] = $match[0];
                 $todo['priority'] = $this->_get_priority($todo['date']);
-                $line = trim(str_replace($match[0], '', $line));
-            } elseif(preg_match("#\d{2}-\d{2}#", $line, $match)) {
+                $params = trim(str_replace($match[0], '', $params));
+            } elseif(preg_match("#\d{2}-\d{2}#", $params, $match)) {
                 $todo['date'] = date('Y') . '-' . $match[0];
                 $todo['priority'] = $this->_get_priority($todo['date']);
-                $line = trim(str_replace($match[0], '', $line));
+                $params = trim(str_replace($match[0], '', $params));
             }
 
             // rest of the line must be the description
             // skip further processing if description is empty
-            $todo['desc'] = trim($line);
             if(empty($todo['desc'])) continue;
 
             if($project) {
