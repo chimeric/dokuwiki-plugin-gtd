@@ -93,6 +93,16 @@ class syntax_plugin_gtd extends DokuWiki_Syntax_Plugin {
      * @author Michael Klier <chi@chimeric.de>
      */
     function _todo2array($data, $expiries) {
+        global $conf;
+        global $ACT;
+
+        // check if we have a serialized todolist already
+        if($ACT != 'save' and $ACT != 'preview' and $ACT != 'edit') {
+            $fn = $this->_todoFN(md5($data));
+            if(file_exists($fn)) {
+                return unserialize(io_readFile($fn, false));
+            }
+        }
 
         $todos_bydate = array();
         $todos_nodate = array();
@@ -199,7 +209,13 @@ class syntax_plugin_gtd extends DokuWiki_Syntax_Plugin {
             }
         }
 
-        // fixme save that whole list so we don't have to render it each time
+        // serialize todolist so we don't have to render it each time
+        if($ACT == 'save') {
+            if(!file_exists($conf['savedir'] . '/cache/gtd')) {
+                mkdir($conf['savedir'] . 'cache/gtd/', $conf['dmode']);
+            }
+            io_saveFile($this->_todoFN(md5($data)), serialize($todolist));
+        }
 
         // we're done return the list
         return ($todolist);
@@ -320,5 +336,21 @@ class syntax_plugin_gtd extends DokuWiki_Syntax_Plugin {
         if(($etime - $ctime) <= 60*60*24*$expiries['due']) return 'due';
         if(($etime - $ctime) <= 60*60*24*$expiries['warn']) return 'warn';
         return 'upco';
+    }
+
+    /**
+     * Returns a file name to store the todolist
+     *
+     * @author Michael Klier <chi@chimeric.de> 
+     */
+    function _todoFN($md5) {
+        global $ID;
+        global $conf;
+
+        $ID = cleanID($ID);
+        $ID = str_replace(':', '/', $ID);
+        $ID = utf8_encodeFN($ID);
+        $fn = $conf['savedir'] . 'cache/gtd/' . $ID . '.' . $md5 . '.gtd';
+        return ($fn);
     }
 }
