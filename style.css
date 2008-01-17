@@ -49,26 +49,27 @@ div.dokuwiki li.plugin_gtd_item del {
   color: __text_neu__;
 }
 
-div.dokuwiki span.plugin_gtd_over,
-div.dokuwiki span.plugin_gtd_upcoming,
-div.dokuwiki span.plugin_gtd_current {
-  padding: 0 0 2px 20px;
-  font-weight: bold;
+div.dokuwiki li.plugin_gtd_due,
+div.dokuwiki li.plugin_gtd_warn,
+div.dokuwiki li.plugin_gtd_pass,
+div.dokuwiki li.plugin_gtd_upco {
+  padding-left: 25px !important;
 }
 
-div.dokuwiki span.plugin_gtd_over {
-  background: url(images/status-over.png) no-repeat 0px 1px;
-  color: #ff5757;
+div.dokuwiki li.plugin_gtd_due {
+  background: #ffd9d9 url(images/status-due.png) no-repeat 5px 6px;
 }
 
-div.dokuwiki span.plugin_gtd_upcoming {
-  background: url(images/status-upcoming.png) no-repeat 0px 1px;
-  color: #71d45b;
+div.dokuwiki li.plugin_gtd_warn {
+  background: #feffcd url(images/status-warn.png) no-repeat 5px 6px;
 }
 
-div.dokuwiki span.plugin_gtd_current {
-  background: url(images/status-current.png) no-repeat 0px 1px;
-  color: #ffa043;
+div.dokuwiki li.plugin_gtd_pass {
+  background: #e3f9ff url(images/status-pass.png) no-repeat 5px 6px;
+}
+
+div.dokuwiki li.plugin_gtd_upco {
+  background: url(images/status-upco.png) no-repeat 5px 6px;
 }
 
 /**
