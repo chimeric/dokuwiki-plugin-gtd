@@ -94,6 +94,8 @@ class syntax_plugin_gtd extends DokuWiki_Syntax_Plugin {
      */
     function _todo2array($data, $expiries) {
 
+        $todos_bydate = array();
+        $todos_nodate = array();
         $todolist = array();
 
         $lines = explode("\n\n",trim($data));
@@ -122,16 +124,16 @@ class syntax_plugin_gtd extends DokuWiki_Syntax_Plugin {
 
             // filter context
             if(preg_match("#@(\S+)#", $params, $match)) {
-                $context = str_replace('_', ' ',$match[1]);
+                $todo['context'] = str_replace('_', ' ',$match[1]);
                 $params = trim(str_replace($match[0], '', $params));
             } else {
-                // no context was given - use default
-                $context = $this->getConf('default_context');
+                // no context was given - ignore
+                continue;
             }
 
             // filter project
             if(preg_match("#\bp:(\S+)#", $params, $match)) {
-                $project = str_replace('_', ' ', $match[1]);
+                $todo['project'] = str_replace('_', ' ', $match[1]);
                 $params = trim(str_replace($match[0], '', $params));
             }
 
@@ -156,13 +158,50 @@ class syntax_plugin_gtd extends DokuWiki_Syntax_Plugin {
                 $params = trim(str_replace($match[0], '', $params));
             }
 
-            if($project) {
-                $todolist[$context]['projects'][$project][] = $todo;
+            if($todo['date']) {
+                $todos_bydate[$todo['date']][] = $todo;
             } else {
-                $todolist[$context]['todos'][] = $todo;
+                array_push($todos_nodate, $todo);
             }
         }
 
+        // do some expensive sorting
+        $dates = array_keys($todos_bydate);
+        natsort($dates);
+
+        // sort todos by dates first
+        foreach($dates as $date) {
+            foreach($todos_bydate[$date] as $todo) {
+                if(!empty($todo['project'])) {
+                    $todolist[$todo['context']]['projects'][$todo['project']][] = array( 'date' => $todo['date'], 
+                                                                                         'desc' => $todo['desc'], 
+                                                                                         'priority' => $todo['priority'],
+                                                                                         'done' => $todo['done'] );
+                } else {
+                    $todolist[$todo['context']]['todos'][] = array( 'date' => $todo['date'],
+                                                                    'desc' => $todo['desc'],
+                                                                    'priority' => $todo['priority'],
+                                                                    'done' => $todo['done'] );
+                }
+            }
+        }
+
+        // sort todos with no date provided
+        foreach($todos_nodate as $todo) {
+            if(!empty($todo['project'])) {
+                $todolist[$todo['context']]['projects'][$todo['project']][] = array( 'desc' => $todo['desc'], 
+                                                                                     'priority' => $todo['priority'],
+                                                                                     'done' => $todo['done'] );
+            } else {
+                $todolist[$todo['context']]['todos'][] = array( 'desc' => $todo['desc'],
+                                                                'priority' => $todo['priority'],
+                                                                'done' => $todo['done'] );
+            }
+        }
+
+        // fixme save that whole list so we don't have to render it each time
+
+        // we're done return the list
         return ($todolist);
     }
 
