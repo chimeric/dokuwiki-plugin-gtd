@@ -135,6 +135,12 @@ class syntax_plugin_gtd extends DokuWiki_Syntax_Plugin {
                 $params = trim(str_replace($match[0], '', $params));
             }
 
+            // filter warning expiries
+            if(preg_match("#\bw:(\d{2})\b#", $params, $match)) {
+                $expiries['warn'] = $match[1];
+                $params = trim(str_replace($match[0], '', $params));
+            }
+
             // filter date
             if(preg_match("#\bd:(\d{4}-\d{2}-\d{2})\b#", $params, $match)) {
                 $todo['date'] = $match[1];
