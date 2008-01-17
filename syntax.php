@@ -136,19 +136,19 @@ class syntax_plugin_gtd extends DokuWiki_Syntax_Plugin {
             }
 
             // filter date
-            if(preg_match("#\b\d{4}-\d{2}-\d{2}\b#", $params, $match)) {
-                $todo['date'] = $match[0];
+            if(preg_match("#\bd:(\d{4}-\d{2}-\d{2})\b#", $params, $match)) {
+                $todo['date'] = $match[1];
                 $todo['priority'] = $this->_get_priority($todo['date'], $expiries);
                 $params = trim(str_replace($match[0], '', $params));
-            } elseif(preg_match("#\d{2}-\d{2}#", $params, $match)) {
-                $todo['date'] = date('Y') . '-' . $match[0];
+            } elseif(preg_match("#\bd:(\d{2}-\d{2})#", $params, $match)) {
+                $todo['date'] = date('Y') . '-' . $match[1];
+                $todo['priority'] = $this->_get_priority($todo['date'], $expiries);
+                $params = trim(str_replace($match[0], '', $params));
+            } elseif(preg_match("#\bd:(\d{2})\b#", $params, $match)) {
+                $todo['date'] = date('Y') . '-' . date('m') . '-' . $match[1];
                 $todo['priority'] = $this->_get_priority($todo['date'], $expiries);
                 $params = trim(str_replace($match[0], '', $params));
             }
-
-            // rest of the line must be the description
-            // skip further processing if description is empty
-            if(empty($todo['desc'])) continue;
 
             if($project) {
                 $todolist[$context]['projects'][$project][] = $todo;
