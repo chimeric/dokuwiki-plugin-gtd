@@ -26,7 +26,7 @@ class syntax_plugin_gtd extends DokuWiki_Syntax_Plugin {
         return array(
             'author' => 'Michael Klier',
             'email'  => 'chi@chimeric.de',
-            'date'   => '2008-01-17',
+            'date'   => '2008-02-13',
             'name'   => 'GTD (Getting Things Done)',
             'desc'   => 'Implements a ToDo List following the principles of GTD.',
             'url'    => 'http://www.chimeric.de/projects/dokuwiki/plugin/gtd',
@@ -211,8 +211,8 @@ class syntax_plugin_gtd extends DokuWiki_Syntax_Plugin {
 
         // serialize todolist so we don't have to render it each time
         if($ACT == 'save') {
-            if(!file_exists($conf['savedir'] . 'cache/gtd/')) {
-                mkdir($conf['savedir'] . 'cache/gtd/', $conf['dmode']);
+            if(!file_exists($conf['savedir'] . '/cache/gtd/')) {
+                mkdir($conf['savedir'] . '/cache/gtd/', $conf['dmode']);
             }
             io_saveFile($this->_todoFN(md5($data)), serialize($todolist));
         }
@@ -350,7 +350,7 @@ class syntax_plugin_gtd extends DokuWiki_Syntax_Plugin {
         $ID = cleanID($ID);
         $ID = str_replace(':', '/', $ID);
         $ID = utf8_encodeFN($ID);
-        $fn = $conf['savedir'] . 'cache/gtd/' . $ID . '.' . $md5 . '.gtd';
+        $fn = $conf['savedir'] . '/cache/gtd/' . $ID . '.' . $md5 . '.gtd';
         return ($fn);
     }
 }
