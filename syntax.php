@@ -354,3 +354,5 @@ class syntax_plugin_gtd extends DokuWiki_Syntax_Plugin {
         return ($fn);
     }
 }
+
+// vim:ts=4:sw=4:et:enc=utf-8:
