@@ -26,10 +26,10 @@ class syntax_plugin_gtd extends DokuWiki_Syntax_Plugin {
         return array(
             'author' => 'Michael Klier',
             'email'  => 'chi@chimeric.de',
-            'date'   => '2008-02-13',
+            'date'   => @file_get_contents(DOKU_PLUGIN.'gtd/VERSION'),
             'name'   => 'GTD (Getting Things Done)',
             'desc'   => 'Implements a ToDo List following the principles of GTD.',
-            'url'    => 'http://www.chimeric.de/projects/dokuwiki/plugin/gtd',
+            'url'    => 'http://dokuwiki.org/plugin:gtd',
         );
     }
  
