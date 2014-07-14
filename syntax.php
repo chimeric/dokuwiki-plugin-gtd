@@ -183,15 +183,21 @@ class syntax_plugin_gtd extends DokuWiki_Syntax_Plugin {
         foreach($dates as $date) {
             foreach($todos_bydate[$date] as $todo) {
                 if(!empty($todo['project'])) {
-                    $todolist[$todo['context']]['projects'][$todo['project']][] = array( 'date' => $todo['date'], 
+                    $todolist[strtolower($todo['context'])]['projects'][$todo['project']][] = array( 'date' => $todo['date'], 
                                                                                          'desc' => $todo['desc'], 
                                                                                          'priority' => $todo['priority'],
                                                                                          'done' => $todo['done'] );
+					if(!array_key_exists('name', $todolist[strtolower($todo['context'])])) {
+						$todolist[strtolower($todo['context'])]['name'] = $todo['context'];
+					}
                 } else {
-                    $todolist[$todo['context']]['todos'][] = array( 'date' => $todo['date'],
-                                                                    'desc' => $todo['desc'],
-                                                                    'priority' => $todo['priority'],
-                                                                    'done' => $todo['done'] );
+                    $todolist[strtolower($todo['context'])]['todos'][] = array( 'date' => $todo['date'],
+                                                                                         'desc' => $todo['desc'],
+                                                                                         'priority' => $todo['priority'],
+                                                                                         'done' => $todo['done'] );
+					if(!array_key_exists('name', $todolist[strtolower($todo['context'])])) {
+						$todolist[strtolower($todo['context'])]['name'] = $todo['context'];
+					}
                 }
             }
         }
@@ -199,13 +205,19 @@ class syntax_plugin_gtd extends DokuWiki_Syntax_Plugin {
         // sort todos with no date provided
         foreach($todos_nodate as $todo) {
             if(!empty($todo['project'])) {
-                $todolist[$todo['context']]['projects'][$todo['project']][] = array( 'desc' => $todo['desc'], 
+                $todolist[strtolower($todo['context'])]['projects'][$todo['project']][] = array( 'desc' => $todo['desc'], 
                                                                                      'priority' => $todo['priority'],
                                                                                      'done' => $todo['done'] );
+				if(!array_key_exists('name', $todolist[strtolower($todo['context'])])) {
+			   		$todolist[strtolower($todo['context'])]['name'] = $todo['context'];
+				}
             } else {
-                $todolist[$todo['context']]['todos'][] = array( 'desc' => $todo['desc'],
+                $todolist[strtolower($todo['context'])]['todos'][] = array( 'desc' => $todo['desc'],
                                                                 'priority' => $todo['priority'],
                                                                 'done' => $todo['done'] );
+				if(!array_key_exists('name', $todolist[strtolower($todo['context'])])) {
+					$todolist[strtolower($todo['context'])]['name'] = $todo['context'];
+				}
             }
         }
 
@@ -238,7 +250,7 @@ class syntax_plugin_gtd extends DokuWiki_Syntax_Plugin {
 
         foreach($todolist as $context => $todos) {
             $out .= '<div class="plugin_gtd_box">' . DOKU_LF;
-            $out .= '<h2 class="plugin_gtd_context">' . htmlspecialchars($context) . '</h2>' . DOKU_LF;
+            $out .= '<h2 class="plugin_gtd_context">' . htmlspecialchars($todolist[$context]['name']) . '</h2>' . DOKU_LF;
             $out .= '<ul class="plugin_gtd_list">' . DOKU_LF;
 
             if(!empty($todolist[$context]['projects'])) {
