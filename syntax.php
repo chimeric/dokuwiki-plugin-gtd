@@ -45,7 +45,7 @@ class syntax_plugin_gtd extends DokuWiki_Syntax_Plugin {
     /**
      * Handle the match
      */
-    function handle($match, $state, $pos, &$handler) {
+    function handle($match, $state, $pos, Doku_Handler $handler) {
 
         // check for modified expiries
         if(preg_match("#<gtd(.*?)>#", $match, $params)) {
@@ -78,7 +78,7 @@ class syntax_plugin_gtd extends DokuWiki_Syntax_Plugin {
      *
      * @author Michael Klier <chi@chimeric.de>
      */
-    function render($mode, &$renderer, $data) {
+    function render($mode, Doku_Renderer $renderer, $data) {
         if($mode == 'xhtml'){
             $renderer->info['cache'] = false;
             $renderer->doc .= $this->_todolist_xhtml($data);
